@@ -35,6 +35,20 @@ function drawBlock() {
     ctx.stroke();
 }
 
+function drawGrass() {
+    ctx.fillStyle = 'green';
+    for (let i = 0; i < canvas.width; i += 50) {
+        for (let j = 0; j < canvas.height; j += 50) {
+            ctx.fillRect(i, j, 40, 40);
+        }
+    }
+}
+
+function drawPathEntry() {
+    ctx.fillStyle = 'brown';
+    ctx.fillRect(canvas.width / 2 - 50, 0, 100, 100); // Path entry at the top center
+}
+
 function drawMap() {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
     ctx.fillRect(canvas.width - mapSize - 10, 10, mapSize, mapSize);
@@ -42,6 +56,8 @@ function drawMap() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawGrass();
+    drawPathEntry();
     drawBlock();
     drawMap();
     requestAnimationFrame(draw);
