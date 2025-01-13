@@ -11,8 +11,16 @@ const block = {
 };
 
 let hasGun = false;
+let storyStep = 0;
 const mapSize = 100;
 const mapScale = 0.2;
+
+const storyMessages = [
+    "You found a friendly block! But something feels off...",
+    "There are whispers about another block, a sibling perhaps?",
+    "You found a clue! Block 2 might be hiding somewhere nearby...",
+    "The mystery deepens. What happened to Block 2?"
+];
 
 function drawBlock() {
     ctx.fillStyle = block.color;
@@ -76,8 +84,10 @@ canvas.addEventListener('click', (event) => {
     ) {
         if (hasGun) {
             block.face = 'sad';
+            alert("You shot the friendly block! The mystery remains unsolved...");
         } else {
-            alert('You found a friendly block!');
+            alert(storyMessages[storyStep]);
+            storyStep = (storyStep + 1) % storyMessages.length;
         }
     } else {
         alert('You found a hidden gun!');
@@ -87,6 +97,25 @@ canvas.addEventListener('click', (event) => {
     // Draw the interaction on the map
     ctx.fillStyle = hasGun ? 'red' : 'green';
     ctx.fillRect(canvas.width - mapSize - 10 + mouseX * mapScale, 10 + mouseY * mapScale, 2, 2);
+});
+
+// Movement keys
+document.addEventListener('keydown', (event) => {
+    const speed = 5;
+    switch (event.key) {
+        case 'ArrowUp':
+            block.y -= speed;
+            break;
+        case 'ArrowDown':
+            block.y += speed;
+            break;
+        case 'ArrowLeft':
+            block.x -= speed;
+            break;
+        case 'ArrowRight':
+            block.x += speed;
+            break;
+    }
 });
 
 draw();
