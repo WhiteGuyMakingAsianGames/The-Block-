@@ -11,6 +11,8 @@ const block = {
 };
 
 let hasGun = false;
+const mapSize = 100;
+const mapScale = 0.2;
 
 function drawBlock() {
     ctx.fillStyle = block.color;
@@ -33,9 +35,15 @@ function drawBlock() {
     ctx.stroke();
 }
 
+function drawMap() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+    ctx.fillRect(canvas.width - mapSize - 10, 10, mapSize, mapSize);
+}
+
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBlock();
+    drawMap();
     requestAnimationFrame(draw);
 }
 
@@ -59,6 +67,10 @@ canvas.addEventListener('click', (event) => {
         alert('You found a hidden gun!');
         hasGun = true;
     }
+
+    // Draw the interaction on the map
+    ctx.fillStyle = hasGun ? 'red' : 'green';
+    ctx.fillRect(canvas.width - mapSize - 10 + mouseX * mapScale, 10 + mouseY * mapScale, 2, 2);
 });
 
 draw();
