@@ -10,6 +10,8 @@ const block = {
     face: 'smiling'
 };
 
+let hasGun = false;
+
 function drawBlock() {
     ctx.fillStyle = block.color;
     ctx.fillRect(block.x, block.y, block.width, block.height);
@@ -36,5 +38,27 @@ function draw() {
     drawBlock();
     requestAnimationFrame(draw);
 }
+
+canvas.addEventListener('click', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    if (
+        mouseX > block.x &&
+        mouseX < block.x + block.width &&
+        mouseY > block.y &&
+        mouseY < block.y + block.height
+    ) {
+        if (hasGun) {
+            block.face = 'sad';
+        } else {
+            alert('You found a friendly block!');
+        }
+    } else {
+        alert('You found a hidden gun!');
+        hasGun = true;
+    }
+});
 
 draw();
