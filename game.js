@@ -14,6 +14,15 @@ const player = {
     color: 'red'
 };
 
+const block = {
+    x: canvas.width / 2 - 50,
+    y: canvas.height / 2 - 50,
+    width: 100,
+    height: 100,
+    color: 'blue',
+    face: 'smiling'
+};
+
 let hasGun = false;
 let storyStep = 0;
 const mapSize = 100;
@@ -38,6 +47,27 @@ function drawPlayer() {
     ctx.fillRect(player.x, player.y, player.width, player.height);
 }
 
+function drawBlock() {
+    ctx.fillStyle = block.color;
+    ctx.fillRect(block.x, block.y, block.width, block.height);
+
+    ctx.fillStyle = 'white';
+    ctx.beginPath();
+    ctx.arc(block.x + 30, block.y + 40, 10, 0, Math.PI * 2);
+    ctx.arc(block.x + 70, block.y + 40, 10, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    if (block.face === 'smiling') {
+        ctx.arc(block.x + 50, block.y + 60, 20, 0, Math.PI, false);
+    } else if (block.face === 'sad') {
+        ctx.arc(block.x + 50, block.y + 80, 20, 0, Math.PI, true);
+    }
+    ctx.stroke();
+}
+
 function drawGrass() {
     ctx.fillStyle = 'green';
     for (let i = 0; i < canvas.width; i += 50) {
@@ -47,13 +77,10 @@ function drawGrass() {
     }
 }
 
-function drawTerrain() {
+function drawBushes() {
     ctx.fillStyle = 'darkgreen';
-    for (let i = 0; i < canvas.width; i += 100) {
-        for (let j = 0; j < canvas.height; j += 100) {
-            ctx.fillRect(i + Math.random() * 50, j + Math.random() * 50, 60, 60);
-        }
-    }
+    ctx.fillRect(200, 200, 80, 80);
+    ctx.fillRect(400, 400, 80, 80);
 }
 
 function drawPathEntry() {
@@ -69,8 +96,9 @@ function drawMap() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawGrass();
-    drawTerrain();
+    drawBushes();
     drawPathEntry();
+    drawBlock();
     drawPlayer();
     drawMap();
     requestAnimationFrame(draw);
@@ -81,7 +109,15 @@ canvas.addEventListener('click', (event) => {
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
 
+    // Check if the player clicked on a bush
     if (
+        (mouseX > 200 && mouseX < 280 && mouseY > 200 && mouseY < 280) ||
+        (mouseX > 400 && mouseX < 480 && mouseY > 400 && mouseY < 480)
+    ) {
+        alert("You entered the bush world!");
+        // Load bush world
+        loadBushWorld();
+    } else if (
         mouseX > player.x &&
         mouseX < player.x + player.width &&
         mouseY > player.y &&
@@ -121,5 +157,15 @@ document.addEventListener('keydown', (event) => {
             break;
     }
 });
+
+function loadBushWorld() {
+    ctx.fillStyle = 'darkgreen';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = 'black';
+    ctx.font = '20px PressStart2P';
+    ctx.fillText('Welcome to the Bush World!', 50, 50);
+    ctx.fillText('A land of mystery...', 50, 80);
+    // Add more features of the bush world here
+}
 
 draw();
